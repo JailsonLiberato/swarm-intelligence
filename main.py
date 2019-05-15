@@ -12,9 +12,6 @@ from util.chart_util import ChartUtil
 class Main(object):
 
     def __init__(self):
-        self.__pso_ui = ParticleSwarmOptimizationUI()
-        self.__abc_ui = ArtificialBeeColonyUI()
-        self.__fss_ui = FishSwarmSearchUI()
         self.__sphere_function = SphereFunction()
         self.__rastringin_function = RastringinFunction()
         self.__rosenbrock_function = RosenbrockFunction()
@@ -25,21 +22,21 @@ class Main(object):
         self.__create_boxplot()
 
     def __execute_sphere(self):
-        pso_sphere = self.__pso_ui.execute(self.__sphere_function, self.__local_topology)
-        fss_sphere = self.__fss_ui.execute(self.__sphere_function)
-        abc_sphere = self.__abc_ui.execute(self.__sphere_function)
+        pso_sphere = ParticleSwarmOptimizationUI(self.__sphere_function, self.__local_topology).fitness_values
+        fss_sphere = FishSwarmSearchUI(self.__sphere_function).fitness_values
+        abc_sphere = ArtificialBeeColonyUI(self.__sphere_function).fitness_values
         return pso_sphere, fss_sphere, abc_sphere
 
     def __execute_rastringin(self):
-        pso_rastringin = self.__pso_ui.execute(self.__rastringin_function)
-        fss_rastringin = self.__fss_ui.execute(self.__rastringin_function)
-        abc_rastringin = self.__abc_ui.execute(self.__rastringin_function)
+        pso_rastringin = ParticleSwarmOptimizationUI(self.__rastringin_function).fitness_values
+        fss_rastringin = FishSwarmSearchUI(self.__rastringin_function).fitness_values
+        abc_rastringin = ArtificialBeeColonyUI(self.__rastringin_function).fitness_values
         return pso_rastringin, fss_rastringin, abc_rastringin
 
     def __execute_rosenbrock(self):
-        pso_rosenbrock = self.__pso_ui.execute(self.__rosenbrock_function)
-        fss_rosenbrock = self.__fss_ui.execute(self.__rosenbrock_function)
-        abc_rosenbrock = self.__abc_ui.execute(self.__rosenbrock_function)
+        pso_rosenbrock = ParticleSwarmOptimizationUI(self.__rosenbrock_function).fitness_values
+        fss_rosenbrock = FishSwarmSearchUI(self.__rosenbrock_function).fitness_values
+        abc_rosenbrock = ArtificialBeeColonyUI(self.__rosenbrock_function).fitness_values
         return pso_rosenbrock, fss_rosenbrock, abc_rosenbrock
 
     def __create_curve_line(self):
