@@ -8,4 +8,9 @@ class ParticleSwarmOptimizationUI(UI):
 
     def __init__(self, fitness_function: FitnessFunction, topology: Topology):
         pso_service = ParticleSwarmOptimizationService(fitness_function, topology)
-        super(ParticleSwarmOptimizationUI, self).__init__(pso_service)
+        self.__fitness_values = pso_service.fitness_values
+
+    @property
+    def fitness_values(self):
+        return self.__fitness_values
+

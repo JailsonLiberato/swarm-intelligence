@@ -7,4 +7,8 @@ class ArtificialBeeColonyUI(UI):
 
     def __init__(self, fitness_function: FitnessFunction):
         abc_service = ArtificialBeeColonyService(fitness_function)
-        super(ArtificialBeeColonyUI, self).__init__(abc_service)
+        self.__fitness_values = abc_service.fitness_values
+
+    @property
+    def fitness_values(self):
+        return self.__fitness_values

@@ -7,4 +7,9 @@ class FishSwarmSearchUI(UI):
 
     def __init__(self, fitness_function: FitnessFunction):
         fss_service = FishSwarmSearchService(fitness_function)
-        super(FishSwarmSearchUI, self).__init__(fss_service)
+        self.__fitness_values = fss_service.fitness_values
+
+    @property
+    def fitness_values(self):
+        return self.__fitness_values
+
