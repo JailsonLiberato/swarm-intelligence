@@ -4,6 +4,7 @@ from business.topologies.topology import Topology
 from util.constants import Constants
 from business.services.particle_service import ParticleService
 import numpy as np
+from copy import copy
 
 
 class ParticleSwarmOptimizationService(Service):
@@ -22,8 +23,8 @@ class ParticleSwarmOptimizationService(Service):
         while count_iterations < Constants.N_EVALUATE_FITNESS:
             self.__calculate_fitness()
             count_iterations += Constants.N_PARTICLES
-            self.__gbest = self.__topology.update_gbest(self.__particles, self.__fitness_function, self.__gbest)
             self.__particles = self.__topology.calculate_velocity(self.__particles, self.__fitness_function)
+            self.__gbest = self.__topology.update_gbest(self.__particles, self.__fitness_function, self.__gbest)
             self.update_position()
             self.update_bound_adjustament()
             self.__fitness_values.append(self.__fitness_function.run(self.__gbest))
@@ -31,7 +32,7 @@ class ParticleSwarmOptimizationService(Service):
     def __calculate_fitness(self):
         for particle in self.__particles:
             if self.__fitness_function.run(particle.position) < self.__fitness_function.run(particle.pbest):
-                particle.pbest = particle.position
+                particle.pbest = copy(particle.position)
                 particle.fitness = self.__fitness_function.run(particle.pbest)
 
     def update_position(self):
