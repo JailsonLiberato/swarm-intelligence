@@ -9,9 +9,8 @@ from copy import copy
 
 class LocalTopology(Topology):
 
-    def calculate_velocity(self, particles, fitness_function: FitnessFunction):
-        self.calculate_lbest(particles, fitness_function)
-        inertia = 0.8
+    @staticmethod
+    def calculate_velocity(particles, inertia: float):
         for particle in particles:
             r1 = random.uniform(0, 1)
             r2 = random.uniform(0, 1)
@@ -24,12 +23,12 @@ class LocalTopology(Topology):
     def calculate_lbest(particles, fitness_function):
         for i in range(len(particles)):
             if i == 0:
-                before_particle = particles[len(particles) - 1]
+                before_particle = particles[-1]
                 current_particle = particles[0]
                 next_particle = particles[1]
             elif i == len(particles) - 1:
-                before_particle = particles[len(particles) - 2]
-                current_particle = particles[len(particles) - 1]
+                before_particle = particles[-2]
+                current_particle = particles[-1]
                 next_particle = particles[0]
             else:
                 before_particle = particles[i - 1]
@@ -41,13 +40,13 @@ class LocalTopology(Topology):
             next_particle.fitness = fitness_function.run(next_particle.pbest)
 
             local_list = [before_particle, current_particle, next_particle]
-            local_list.sort(key=lambda x: x.fitness)
-            particle: Particle = local_list[0]
-            before_particle.lbest = particle.pbest
-            current_particle.lbest = particle.pbest
-            next_particle.lbest = particle.pbest
+            particle: Particle = min(local_list, key=lambda x: x.fitness)
+            before_particle.lbest = copy(particle.pbest)
+            current_particle.lbest = copy(particle.pbest)
+            next_particle.lbest = copy(particle.pbest)
 
     def update_gbest(self, particles, fitness_function: FitnessFunction, gbest):
+        self.calculate_lbest(particles, fitness_function)
         for particle in particles:
             if (fitness_function.run(particle.lbest) < fitness_function.run(gbest)) and \
                     self.is_limit_exceeded(fitness_function, particle.lbest):

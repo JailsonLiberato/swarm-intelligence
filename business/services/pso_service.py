@@ -5,6 +5,7 @@ from util.constants import Constants
 from business.services.particle_service import ParticleService
 import numpy as np
 from copy import copy
+import math
 
 
 class ParticleSwarmOptimizationService(Service):
@@ -23,8 +24,9 @@ class ParticleSwarmOptimizationService(Service):
         while count_iterations < Constants.N_EVALUATE_FITNESS:
             self.__calculate_fitness()
             count_iterations += Constants.N_PARTICLES
-            self.__particles = self.__topology.calculate_velocity(self.__particles, self.__fitness_function)
             self.__gbest = self.__topology.update_gbest(self.__particles, self.__fitness_function, self.__gbest)
+            inertia = self.__generate_inertia(count_iterations)
+            self.__particles = self.__topology.calculate_velocity(self.__particles, inertia)
             self.update_position()
             self.update_bound_adjustament()
             self.__fitness_values.append(self.__fitness_function.run(self.__gbest))
@@ -33,7 +35,15 @@ class ParticleSwarmOptimizationService(Service):
         for particle in self.__particles:
             if self.__fitness_function.run(particle.position) < self.__fitness_function.run(particle.pbest):
                 particle.pbest = copy(particle.position)
-                particle.fitness = self.__fitness_function.run(particle.pbest)
+                particle.fitness = self.__fitness_function.run(particle.position)
+
+    @staticmethod
+    def __generate_inertia(count_iterations):
+        return Constants.INERTIA_MAX - count_iterations * (Constants.INERTIA_MAX - Constants.INERTIA_MIN) / \
+                   Constants.N_EVALUATE_FITNESS
+
+    def __is_limit_exceeded(self, pbest):
+        return np.any(pbest >= self.__fitness_function.min_bound) and np.any(pbest <= self.__fitness_function.max_bound)
 
     def update_position(self):
         for particle in self.__particles:
