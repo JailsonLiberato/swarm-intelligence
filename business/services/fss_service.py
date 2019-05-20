@@ -20,6 +20,7 @@ class FishSwarmSearchService(Service):
             school_weight_1 = sum(map(lambda x: x.weight, self.__school))
             for fish in self.__school:
                 self.__find_neighbor_position(fish, count_fitness)
+                self.__get_delta_position(fish)
                 self.__evaluate_fitness(fish)
                 count_fitness += 1
                 self.__feed_fish(fish)
@@ -31,11 +32,23 @@ class FishSwarmSearchService(Service):
             success = school_weight_2 > school_weight_1
             for fish in self.__school:
                 self.__execute_volitive_movement(fish, barycenter, success, count_fitness)
-                self.__update_step_individual(fish, count_fitness)
+                self.__update_bound_adjustament()
             self.__fitness_values.append(self.__get_best_fitness().fitness)
+
+    def __update_bound_adjustament(self):
+        for fish in self.__school:
+            fish.position[fish.position > self.__fitness_function.max_bound] = self.__fitness_function.max_bound
+            fish.position[fish.position < self.__fitness_function.min_bound] = self.__fitness_function.min_bound
+
+    def __get_delta_cost_max(self):
+        return max(self.__school, key=lambda p: p.delta_fitness)
 
     def __get_best_fitness(self):
         return min(self.__school, key=lambda p: p.fitness)
+
+    @staticmethod
+    def __get_delta_position(fish):
+        fish.delta_position = fish.position - fish.neighborhood
 
     def __update_step_individual(self, fish, count_fitness):
         fish.position = fish.position + \
@@ -58,18 +71,22 @@ class FishSwarmSearchService(Service):
                              * np.random.uniform(-1, 1, size=(1, Constants.N_DIMENSIONS)))
 
     def __evaluate_fitness(self, fish):
-        fish.fitness = self.__fitness_function.run(fish.neighborhood) - self.__fitness_function.run(fish.position)
+        fish.fitness = self.__fitness_function.run(fish.position)
+        fish.delta_fitness = self.__fitness_function.run(fish.neighborhood) - self.__fitness_function.run(fish.position)
 
     def __feed_fish(self, fish):
-        max_fitness = max(f.fitness for f in self.__school)
-        fish.weight = fish.weight + (fish.fitness / max_fitness)
+        max_fitness = self.__get_delta_cost_max().delta_fitness
+        if max_fitness != 0:
+            fish.weight = fish.weight + (fish.fitness / max_fitness)
+            if fish.weight < Constants.MIN_WEIGHT:
+                fish.weight = Constants.MIN_WEIGHT
 
     def __get_min_fitness(self):
         return min(f.fitness for f in self.__school)
 
     def __evaluate_drift(self):
-        a = sum(map(lambda x: x.position * x.fitness, self.__school))
-        b = sum(map(lambda x: x.fitness, self.__school))
+        a = sum(map(lambda x: x.delta_position * x.delta_fitness, self.__school))
+        b = sum(map(lambda x: x.delta_fitness, self.__school))
 
         if b > 0:
             return a / b
@@ -86,8 +103,8 @@ class FishSwarmSearchService(Service):
 
     def __execute_volitive_movement(self, fish, barycenter, success, count_fitness):
         a = fish.position - barycenter
-        random_step = np.random.uniform(0, 1, fish.position.shape)
-        v = self.__generate_step_volitive(count_fitness) * (a / np.linalg.norm(a)) * random_step
+        #random_step = np.random.uniform(0, 1, fish.position.shape)
+        v = self.__generate_step_volitive(count_fitness) * (a / np.linalg.norm(a)) #* random_step
         if success:
             fish.position -= v
         else:

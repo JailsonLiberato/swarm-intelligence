@@ -8,8 +8,8 @@ from copy import copy
 
 class LocalTopology(Topology):
 
-    @staticmethod
-    def calculate_velocity(particles, inertia: float):
+    def calculate_velocity(self, particles, inertia: float, fitness_function: FitnessFunction):
+        self.calculate_lbest(particles, fitness_function)
         for particle in particles:
             r1 = random.uniform(0, 1)
             r2 = random.uniform(0, 1)
@@ -44,9 +44,4 @@ class LocalTopology(Topology):
             current_particle.lbest = copy(particle.pbest)
             next_particle.lbest = copy(particle.pbest)
 
-    def update_gbest(self, particles, fitness_function: FitnessFunction, gbest):
-        self.calculate_lbest(particles, fitness_function)
-        for particle in particles:
-            if fitness_function.run(particle.lbest) < fitness_function.run(gbest):
-                gbest = copy(particle.lbest)
-        return gbest
+

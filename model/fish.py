@@ -8,6 +8,9 @@ class Fish(Entity):
         self.__position = position
         self.__weight = weight
         self.__fitness = fitness
+        self.__delta_fitness: float = 0.0
+        self.__delta_position: float = 0.0
+        self.__neighborhood = 0.0
 
     @property
     def id(self):
@@ -36,3 +39,28 @@ class Fish(Entity):
     @fitness.setter
     def fitness(self, fitness):
         self.__fitness = fitness
+
+    @property
+    def delta_fitness(self):
+        return self.__delta_fitness
+
+    @delta_fitness.setter
+    def delta_fitness(self, delta_fitness):
+        self.__delta_fitness = delta_fitness
+
+    @property
+    def delta_position(self):
+        return self.__delta_position
+
+    @delta_position.setter
+    def delta_position(self, delta_position):
+        self.__delta_position = delta_position
+
+    @property
+    def neighborhood(self):
+        return self.__neighborhood
+
+    @neighborhood.setter
+    def neighborhood(self, neighborhood):
+        self.__neighborhood = neighborhood
+

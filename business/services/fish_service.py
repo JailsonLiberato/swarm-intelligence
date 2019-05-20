@@ -24,7 +24,5 @@ class FishService(Service):
 
     @staticmethod
     def __generate_initial_weight():
-        min_value = Constants.MIN_WEIGHT
-        max_value = 5000
-        return np.random.uniform(min_value, max_value, size=(1, 1))[0][0]
+        return Constants.MIN_WEIGHT
 
