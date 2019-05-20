@@ -22,7 +22,7 @@ class Main(object):
         self.__create_boxplot()
 
     def __execute_sphere(self):
-        pso_sphere = ParticleSwarmOptimizationUI(self.__sphere_function, self.__local_topology).fitness_values
+        pso_sphere = [] #ParticleSwarmOptimizationUI(self.__sphere_function, self.__local_topology).fitness_values
         fss_sphere = FishSwarmSearchUI(self.__sphere_function).fitness_values
         abc_sphere = ArtificialBeeColonyUI(self.__sphere_function).fitness_values
         return pso_sphere, fss_sphere, abc_sphere

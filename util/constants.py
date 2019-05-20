@@ -10,3 +10,7 @@ class Constants(object):
     INERTIA_MIN: float = 0.4
     N_SCHOOL: int = 30
     MIN_WEIGHT: float = 1.0
+    MAX_INDIVIDUAL: float = 0.1
+    MIN_INDIVIDUAL: float = 0.001
+    MAX_VOLITIVE: float = 0.01
+    MIN_VOLITIVE: float = 0.001
