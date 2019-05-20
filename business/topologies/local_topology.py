@@ -3,7 +3,6 @@ from business.functions.fitness_function import FitnessFunction
 import random
 from util.constants import Constants
 from model.particle import Particle
-import numpy as np
 from copy import copy
 
 
@@ -48,12 +47,6 @@ class LocalTopology(Topology):
     def update_gbest(self, particles, fitness_function: FitnessFunction, gbest):
         self.calculate_lbest(particles, fitness_function)
         for particle in particles:
-            if (fitness_function.run(particle.lbest) < fitness_function.run(gbest)) and \
-                    self.is_limit_exceeded(fitness_function, particle.lbest):
+            if fitness_function.run(particle.lbest) < fitness_function.run(gbest):
                 gbest = copy(particle.lbest)
         return gbest
-
-    @staticmethod
-    def is_limit_exceeded(fitness_function, pbest):
-        return np.any(pbest >= fitness_function.min_bound) and np.any(pbest <= fitness_function.max_bound)
-

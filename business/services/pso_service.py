@@ -5,7 +5,6 @@ from util.constants import Constants
 from business.services.particle_service import ParticleService
 import numpy as np
 from copy import copy
-import math
 
 
 class ParticleSwarmOptimizationService(Service):
@@ -41,9 +40,6 @@ class ParticleSwarmOptimizationService(Service):
     def __generate_inertia(count_iterations):
         return Constants.INERTIA_MAX - count_iterations * (Constants.INERTIA_MAX - Constants.INERTIA_MIN) / \
                    Constants.N_EVALUATE_FITNESS
-
-    def __is_limit_exceeded(self, pbest):
-        return np.any(pbest >= self.__fitness_function.min_bound) and np.any(pbest <= self.__fitness_function.max_bound)
 
     def update_position(self):
         for particle in self.__particles:
