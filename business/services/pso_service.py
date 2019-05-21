@@ -3,7 +3,6 @@ from business.functions.fitness_function import FitnessFunction
 from business.topologies.topology import Topology
 from util.constants import Constants
 from business.services.particle_service import ParticleService
-import numpy as np
 from copy import copy
 
 
