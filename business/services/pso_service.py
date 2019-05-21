@@ -28,7 +28,9 @@ class ParticleSwarmOptimizationService(Service):
             self.__particles = self.__topology.calculate_velocity(self.__particles, inertia, self.__fitness_function)
             self.update_position()
             self.update_bound_adjustament()
-            self.__fitness_values.append(self.__fitness_function.run(self.__gbest))
+            best_value = self.__fitness_function.run(self.__gbest)
+            print(count_iterations, " : ", best_value)
+            self.__fitness_values.append(best_value)
 
     def __calculate_fitness(self):
         for particle in self.__particles:
@@ -39,7 +41,7 @@ class ParticleSwarmOptimizationService(Service):
     def __update_gbest(self):
         for particle in self.__particles:
             if self.__fitness_function.run(particle.pbest) < self.__fitness_function.run(self.__gbest):
-                self.__gbest = copy(particle.pbest)
+                self.__gbest = particle.pbest
 
     @staticmethod
     def __generate_inertia(count_iterations):
@@ -51,14 +53,9 @@ class ParticleSwarmOptimizationService(Service):
             particle.position += particle.velocity
 
     def update_bound_adjustament(self):
-        min_array = [self.__fitness_function.min_bound]
-        max_array = [self.__fitness_function.max_bound]
         for particle in self.__particles:
-           # np.putmask(particle.position, particle.position > max_array, self.__fitness_function.max_bound)
-           #np.putmask(particle.position, particle.position < min_array, self.__fitness_function.min_bound)
             particle.position[particle.position > self.__fitness_function.max_bound] = self.__fitness_function.max_bound
             particle.position[particle.position < self.__fitness_function.min_bound] = self.__fitness_function.min_bound
-
 
     @property
     def fitness_values(self):

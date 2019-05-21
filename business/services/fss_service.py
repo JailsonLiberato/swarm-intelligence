@@ -13,7 +13,7 @@ class FishSwarmSearchService(Service):
         self.__fish_service = FishService()
         self.__school = self.__fish_service.initialize_school(fitness_function)
         self.__fitness_values = []
-        self.__gbest = copy(self.__school[0].position)
+        self.__gbest = self.__school[0].position
         self.__execute()
 
     def __execute(self):
@@ -23,7 +23,7 @@ class FishSwarmSearchService(Service):
             self.__find_neighbor_position(count_fitness)
             self.__get_delta_position()
             self.__evaluate_fitness()
-            count_fitness += 1
+            count_fitness += Constants.N_PARTICLES
             self.__feed_fish()
             drift = self.__evaluate_drift()
             school_weight_2 = sum(map(lambda x: x.weight, self.__school))
@@ -32,7 +32,9 @@ class FishSwarmSearchService(Service):
             success = school_weight_2 > school_weight_1
             self.__execute_volitive_movement(barycenter, success, count_fitness)
             self.__update_bound_adjustament()
-            self.__fitness_values.append(self.__get_best_fitness())
+            best_fitness = self.__get_best_fitness()
+            print(count_fitness, " : ", best_fitness)
+            self.__fitness_values.append(best_fitness)
 
     def __update_bound_adjustament(self):
         for fish in self.__school:
@@ -47,6 +49,7 @@ class FishSwarmSearchService(Service):
         fitness = self.__fitness_function.run(min_fish.position)
         gbest_fitness = self.__fitness_function.run(self.__gbest)
         if gbest_fitness > fitness:
+            self.__gbest = copy(min_fish.position)
             return fitness
         return gbest_fitness
 
