@@ -22,3 +22,5 @@ class Constants(object):
 
     #ABC
     N_FOOD_SOURCE: int = 30
+    EMPLOYED_BEES_PERCENTAGE: float = 0.5
+    TRIAL_LIMIT: int = 100

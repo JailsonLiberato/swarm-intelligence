@@ -10,9 +10,7 @@ class FoodSourceService(Service):
     def initialize_food_source(self, fitness_function: FitnessFunction):
         food_sources = []
         for i in range(Constants.N_FOOD_SOURCE):
-            position = self.__generate_initial_position(fitness_function)
-            food_source = FoodSource(position)
-            food_sources.append(food_source)
+            food_sources.append(self.create_foodsource(fitness_function))
         return food_sources
 
     @staticmethod
@@ -23,5 +21,10 @@ class FoodSourceService(Service):
         for _ in range(Constants.N_DIMENSIONS):
             random_value = np.random.uniform(0, 1, size=(1, 1))
             x = min_value + random_value * (max_value - min_value)
-            position.append(x)
-        return position
+            position.append(x[0][0])
+        return np.array(position)
+
+    def create_foodsource(self, fitness_function: FitnessFunction):
+        position = self.__generate_initial_position(fitness_function)
+        fitness = fitness_function.run(position)
+        return FoodSource(position, fitness)

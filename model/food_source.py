@@ -3,8 +3,10 @@ from model.entity import Entity
 
 class FoodSource(Entity):
 
-    def __init__(self, position):
+    def __init__(self, position, fitness):
         self.__position = position
+        self.__fitness: float = fitness
+        self.__trials: int = 0
 
     @property
     def position(self):
@@ -13,3 +15,19 @@ class FoodSource(Entity):
     @position.setter
     def position(self, position):
         self.__position - position
+
+    @property
+    def fitness(self):
+        return self.__fitness
+
+    @fitness.setter
+    def fitness(self, fitness):
+        self.__fitness = fitness
+
+    @property
+    def trials(self):
+        return self.__trials
+
+    @trials.setter
+    def trials(self, trials):
+        self.__trials = trials
