@@ -47,8 +47,10 @@ class FishSwarmSearchService(Service):
     def __get_best_fitness(self):
         min_fish = min(self.__school, key=lambda p: p.fitness)
         fitness = self.__fitness_function.run(min_fish.position)
+        min_fish.fitness = fitness
         gbest_fitness = self.__fitness_function.run(self.__gbest)
         if gbest_fitness > fitness:
+
             self.__gbest = copy(min_fish.position)
             return fitness
         return gbest_fitness

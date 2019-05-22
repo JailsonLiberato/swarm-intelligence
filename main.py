@@ -28,13 +28,13 @@ class Main(object):
         return pso_sphere, fss_sphere, abc_sphere
 
     def __execute_rastringin(self):
-        pso_rastringin = ParticleSwarmOptimizationUI(self.__rastringin_function).fitness_values
+        pso_rastringin = ParticleSwarmOptimizationUI(self.__rastringin_function, self.__local_topology).fitness_values
         fss_rastringin = FishSwarmSearchUI(self.__rastringin_function).fitness_values
         abc_rastringin = ArtificialBeeColonyUI(self.__rastringin_function).fitness_values
         return pso_rastringin, fss_rastringin, abc_rastringin
 
     def __execute_rosenbrock(self):
-        pso_rosenbrock = ParticleSwarmOptimizationUI(self.__rosenbrock_function).fitness_values
+        pso_rosenbrock = ParticleSwarmOptimizationUI(self.__rosenbrock_function, self.__local_topology).fitness_values
         fss_rosenbrock = FishSwarmSearchUI(self.__rosenbrock_function).fitness_values
         abc_rosenbrock = ArtificialBeeColonyUI(self.__rosenbrock_function).fitness_values
         return pso_rosenbrock, fss_rosenbrock, abc_rosenbrock
@@ -50,9 +50,9 @@ class Main(object):
         abc_fitness_values = []
         for _ in range(Constants.N_ITERATIONS_BOXPLOT):
             pso_sphere, fss_sphere, abc_sphere = self.__execute_sphere()
-            pso_fitness_values.append(pso_sphere[len(pso_sphere) - 1])
-            fss_fitness_values.append(fss_sphere[len(fss_sphere) - 1])
-            abc_fitness_values.append(abc_sphere[len(abc_sphere) - 1])
+            pso_fitness_values.append(pso_sphere[-1])
+            fss_fitness_values.append(fss_sphere[-1])
+            abc_fitness_values.append(abc_sphere[-1])
         ChartUtil.create_boxplot(pso_fitness_values, fss_fitness_values, abc_fitness_values,
                                  self.__sphere_function.name)
         pso_fitness_values = []
@@ -60,9 +60,9 @@ class Main(object):
         abc_fitness_values = []
         for _ in range(Constants.N_ITERATIONS_BOXPLOT):
             pso_rastringin, fss_rastringin, abc_rastringin = self.__execute_rastringin()
-            pso_fitness_values.append(pso_rastringin[len(pso_rastringin) - 1])
-            fss_fitness_values.append(fss_rastringin[len(fss_rastringin) - 1])
-            abc_fitness_values.append(abc_rastringin[len(abc_rastringin) - 1])
+            pso_fitness_values.append(pso_rastringin[-1])
+            fss_fitness_values.append(fss_rastringin[-1])
+            abc_fitness_values.append(abc_rastringin[-1])
         ChartUtil.create_boxplot(pso_fitness_values, fss_fitness_values, abc_fitness_values,
                                  self.__rastringin_function.name)
         pso_fitness_values = []
@@ -70,9 +70,9 @@ class Main(object):
         abc_fitness_values = []
         for _ in range(Constants.N_ITERATIONS_BOXPLOT):
             pso_rosenbrock, fss_rosenbrock, abc_rosenbrock = self.__execute_rosenbrock()
-            pso_fitness_values.append(pso_rosenbrock[len(pso_rosenbrock) - 1])
-            fss_fitness_values.append(fss_rosenbrock[len(fss_rosenbrock) - 1])
-            abc_fitness_values.append(abc_rosenbrock[len(abc_rosenbrock) - 1])
+            pso_fitness_values.append(pso_rosenbrock[-1])
+            fss_fitness_values.append(fss_rosenbrock[-1])
+            abc_fitness_values.append(abc_rosenbrock[-1])
         ChartUtil.create_boxplot(pso_fitness_values, fss_fitness_values, abc_fitness_values,
                                  self.__rosenbrock_function.name)
 

@@ -24,15 +24,19 @@ class ArtificialBeeColonyService(Service):
         count_fitness: int = Constants.N_FOOD_SOURCE
         while count_fitness < Constants.N_EVALUATE_FITNESS:
             self.__employed_bees_stage()
-            #self.__evaluate_fitness()
-            #count_fitness += Constants.N_FOOD_SOURCE
+            self.__update_bound_adjustament()
+            self.__evaluate_fitness()
+            count_fitness += Constants.N_FOOD_SOURCE
             self.__onlooker_bees_stage()
-            #self.__evaluate_fitness()
-            #count_fitness += Constants.N_FOOD_SOURCE
+            self.__update_bound_adjustament()
+            self.__evaluate_fitness()
+            count_fitness += Constants.N_FOOD_SOURCE
             self.__scout_bees_stage()
+            self.__update_bound_adjustament()
             self.__evaluate_fitness()
             count_fitness += Constants.N_FOOD_SOURCE
             value = self.__get_best_source()
+            count_fitness += Constants.N_FOOD_SOURCE
             self.__fitness_values.append(value)
             print(count_fitness, " : ", value)
         return self.__fitness_values
@@ -104,9 +108,9 @@ class ArtificialBeeColonyService(Service):
         return new_position
 
     def __update_bound_adjustament(self):
-        for fish in self.__school:
-            fish.position[fish.position > self.__fitness_function.max_bound] = self.__fitness_function.max_bound
-            fish.position[fish.position < self.__fitness_function.min_bound] = self.__fitness_function.min_bound
+        for food_source in self.__food_sources:
+            food_source.position[food_source.position > self.__fitness_function.max_bound] = self.__fitness_function.max_bound
+            food_source.position[food_source.position < self.__fitness_function.min_bound] = self.__fitness_function.min_bound
 
     def __random_solution_excluding(self, food_source):
         available_indexes = set(range(self.__employed_bees))

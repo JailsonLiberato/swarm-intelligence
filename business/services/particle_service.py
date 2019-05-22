@@ -19,4 +19,4 @@ class ParticleService(Service):
     def generate_initial_position(fitness_function: FitnessFunction):
         min_value = fitness_function.min_initialization
         max_value = fitness_function.max_initialization
-        return np.random.uniform(min_value, max_value, size=(1, Constants.N_DIMENSIONS))
+        return np.random.uniform(min_value, max_value, size=(1, Constants.N_DIMENSIONS))[0]
