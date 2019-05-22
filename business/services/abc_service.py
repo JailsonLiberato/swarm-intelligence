@@ -24,17 +24,17 @@ class ArtificialBeeColonyService(Service):
         count_fitness: int = Constants.N_FOOD_SOURCE
         while count_fitness < Constants.N_EVALUATE_FITNESS:
             self.__employed_bees_stage()
-            self.__evaluate_fitness()
-            count_fitness += Constants.N_FOOD_SOURCE
+            #self.__evaluate_fitness()
+            #count_fitness += Constants.N_FOOD_SOURCE
             self.__onlooker_bees_stage()
-            self.__evaluate_fitness()
-            count_fitness += Constants.N_FOOD_SOURCE
+            #self.__evaluate_fitness()
+            #count_fitness += Constants.N_FOOD_SOURCE
             self.__scout_bees_stage()
             self.__evaluate_fitness()
             count_fitness += Constants.N_FOOD_SOURCE
             value = self.__get_best_source()
             self.__fitness_values.append(value)
-            print(count_fitness, " : ", value)
+           # print(count_fitness, " : ", value)
         return self.__fitness_values
 
     def __get_best_source(self):
