@@ -10,7 +10,7 @@ class FoodSourceService(Service):
     def initialize_food_source(self, fitness_function: FitnessFunction):
         food_sources = []
         for i in range(Constants.N_FOOD_SOURCE):
-            food_sources.append(self.create_foodsource(fitness_function))
+            food_sources.append(self.create_foodsource(fitness_function, i+1))
         return food_sources
 
     @staticmethod
@@ -24,7 +24,7 @@ class FoodSourceService(Service):
             position.append(x[0][0])
         return np.array(position)
 
-    def create_foodsource(self, fitness_function: FitnessFunction):
+    def create_foodsource(self, fitness_function: FitnessFunction, id):
         position = self.__generate_initial_position(fitness_function)
         fitness = fitness_function.run(position)
-        return FoodSource(position, fitness)
+        return FoodSource(id, position, fitness)

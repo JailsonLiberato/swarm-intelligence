@@ -3,10 +3,16 @@ from model.entity import Entity
 
 class FoodSource(Entity):
 
-    def __init__(self, position, fitness):
+    def __init__(self, id, position, fitness):
+        self.__id = id
         self.__position = position
         self.__fitness: float = fitness
+        self.__fitness_probability: float = 0.0
         self.__trials: int = 0
+
+    @property
+    def id(self):
+        return self.__id
 
     @property
     def position(self):
@@ -31,3 +37,11 @@ class FoodSource(Entity):
     @trials.setter
     def trials(self, trials):
         self.__trials = trials
+
+    @property
+    def fitness_probability(self):
+        return self.__fitness_probability
+
+    @fitness_probability.setter
+    def fitness_probability(self, fitness_probability):
+        self.__fitness_probability = fitness_probability
