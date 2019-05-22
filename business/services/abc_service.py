@@ -16,17 +16,22 @@ class ArtificialBeeColonyService(Service):
         self.__onlooker_bees = Constants.N_FOOD_SOURCE - self.__employed_bees
         self.__food_source_service = FoodSourceService()
         self.__food_sources = self.__food_source_service.initialize_food_source(self.__fitness_function)
-        self.__gbest = copy(self.__food_sources[0].position)
+        self.__gbest = self.__food_sources[0].position
         self.__evaluate_fitness()
         self.__execute()
 
     def __execute(self):
-        count_fitness: int = 0
+        count_fitness: int = Constants.N_FOOD_SOURCE
         while count_fitness < Constants.N_EVALUATE_FITNESS:
-            count_fitness += Constants.N_FOOD_SOURCE
             self.__employed_bees_stage()
+            self.__evaluate_fitness()
+            count_fitness += Constants.N_FOOD_SOURCE
             self.__onlooker_bees_stage()
+            self.__evaluate_fitness()
+            count_fitness += Constants.N_FOOD_SOURCE
             self.__scout_bees_stage()
+            self.__evaluate_fitness()
+            count_fitness += Constants.N_FOOD_SOURCE
             value = self.__get_best_source()
             self.__fitness_values.append(value)
             print(count_fitness, " : ", value)
@@ -77,7 +82,7 @@ class ArtificialBeeColonyService(Service):
         if np.array_equal(new_position, food_source.position):
             food_source.trials += 1
         else:
-            food_source.position = copy(new_position)
+            food_source.position = new_position
             food_source.trials = 0
 
     def __best_position(self, current_position, new_position):
@@ -91,10 +96,16 @@ class ArtificialBeeColonyService(Service):
         k_source_index = self.__random_solution_excluding([current_solution_index])
         k_position = self.__food_sources[k_source_index].position
        # d = rand.randint(0, 1) #d = rand.randint(0, len(self.fn_lb) - 1) #Verificar as dimensões
-        r = rand.uniform(-1, 1)
+        r = np.random.uniform(-1, 1, size=(1, Constants.N_DIMENSIONS))[0]
         #new_position = np.copy(position)
+
         new_position = position + r * (position - k_position)
-        return np.around(new_position, decimals=4)
+        return new_position
+
+    def __update_bound_adjustament(self):
+        for fish in self.__school:
+            fish.position[fish.position > self.__fitness_function.max_bound] = self.__fitness_function.max_bound
+            fish.position[fish.position < self.__fitness_function.min_bound] = self.__fitness_function.min_bound
 
     def __random_solution_excluding(self, food_source):
         available_indexes = set(range(self.__employed_bees))

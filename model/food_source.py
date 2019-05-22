@@ -6,7 +6,7 @@ class FoodSource(Entity):
     def __init__(self, id, position, fitness):
         self.__id = id
         self.__position = position
-        self.__fitness: float = fitness
+        self.__fitness = fitness
         self.__fitness_probability: float = 0.0
         self.__trials: int = 0
 
@@ -20,7 +20,7 @@ class FoodSource(Entity):
 
     @position.setter
     def position(self, position):
-        self.__position - position
+        self.__position = position
 
     @property
     def fitness(self):
