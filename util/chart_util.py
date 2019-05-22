@@ -27,7 +27,7 @@ class ChartUtil(object):
         ax.set_xticklabels(['PSO', 'FSS', 'ABC'])
         plot.title("Boxplot: " + title)
         name_file = title.lower()
-        fig.savefig('..//file//boxplot_' + name_file + '.png', bbox_inches='tight')
+        fig.savefig('file//boxplot_' + name_file + '.png', bbox_inches='tight')
         plot.close()
 
 

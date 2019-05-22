@@ -34,7 +34,7 @@ class ArtificialBeeColonyService(Service):
             count_fitness += Constants.N_FOOD_SOURCE
             value = self.__get_best_source()
             self.__fitness_values.append(value)
-           # print(count_fitness, " : ", value)
+            print(count_fitness, " : ", value)
         return self.__fitness_values
 
     def __get_best_source(self):
