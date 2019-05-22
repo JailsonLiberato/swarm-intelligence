@@ -78,7 +78,8 @@ class ArtificialBeeColonyService(Service):
             best_position = self.__best_position(food_source.position, new_position)
             self.__set_position(food_source, best_position)
 
-    def __set_position(self, food_source, new_position):
+    @staticmethod
+    def __set_position(food_source, new_position):
         if np.array_equal(new_position, food_source.position):
             food_source.trials += 1
         else:
